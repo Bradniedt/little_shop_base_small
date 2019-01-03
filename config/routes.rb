@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :orders, only: [:show] do
       patch '/items/:slug/fulfill', to: 'orders#fulfill_item', as: 'item_fulfill', param: :slug
     end
-    resources :items, except: [:show]
+    resources :items, except: [:show], param: :slug
     patch '/items/:slug/enable', to: 'items#enable', as: 'enable_item', param: :slug
     patch '/items/:slug/disable', to: 'items#disable', as: 'disable_item', param: :slug
   end

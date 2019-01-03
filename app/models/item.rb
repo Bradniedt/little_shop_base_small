@@ -47,6 +47,10 @@ class Item < ApplicationRecord
     OrderItem.find_by_item_id(self.id) !=  nil
   end
 
+  def to_param
+    self.slug
+  end
+
   private
 
   def make_slug
