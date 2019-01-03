@@ -67,8 +67,8 @@ class Dashboard::ItemsController < Dashboard::BaseController
     end
 
     ip = item_params
-    if item_params[:name] != @item.name
-      ip[:slug] = make_slug(@item)
+    if ip[:name] != @item.name
+      ip[:slug] = make_slug(ip[:name])
     end
     if ip[:image].empty?
       ip[:image] = 'https://picsum.photos/200/300/?image=524'
@@ -102,21 +102,21 @@ class Dashboard::ItemsController < Dashboard::BaseController
 
   private
 
-  def make_slug(item)
-    if item
-      item.slug =   "#{item.name.delete(' ').downcase}-0"
-      check_slug(item.slug)
+  def make_slug(name)
+    if name
+      slug =   "#{name.delete(' ').downcase}-0"
+      check_slug(slug)
     end
   end
 
   def check_slug(slug)
     n = slug.chars.last.to_i if slug
-    if Item.find_by(slug: self.slug)
+    if Item.find_by(slug: slug)
       n += 1
-      self.slug =   "#{self.name.delete(' ').downcase}-#{n}"
-      check_slug(self.slug)
+      slug =   "#{slug.delete(' ').downcase}-#{n}"
+      check_slug(slug)
     else
-      self.slug
+      slug
     end
   end
 
