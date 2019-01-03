@@ -34,7 +34,7 @@ class Admin::UsersController < Admin::BaseController
   private
 
   def set_user_active(state)
-    user = User.find(params[:user_id])
+    user = User.find_by(slug: params[:user_slug])
     user.active = state
     user.save
     redirect_to admin_users_path
