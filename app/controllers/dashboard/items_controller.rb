@@ -61,8 +61,10 @@ class Dashboard::ItemsController < Dashboard::BaseController
     @merchant = current_user
     if current_admin?
       @merchant = User.find_by(slug: params[:slug])
+      @item = Item.find_by(slug: params[:id])
+    else
+      @item = Item.find_by(slug: params[:slug])
     end
-    @item = Item.find_by(slug: params[:id])
 
     ip = item_params
     if ip[:image].empty?
