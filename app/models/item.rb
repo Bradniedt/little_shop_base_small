@@ -16,7 +16,7 @@ class Item < ApplicationRecord
   }
   validates :slug, uniqueness: true
 
-  before_save :make_slug
+  before_validation :make_slug
 
   def self.item_popularity(count, order)
     Item.joins(:order_items)
@@ -50,15 +50,17 @@ class Item < ApplicationRecord
   private
 
   def make_slug
-    self.slug =   "#{self.name.delete(' ').downcase}" if self.name
-    check_slug(self.slug)
+    if self.name
+      self.slug =   "#{self.name.delete(' ').downcase}-0"
+      check_slug(self.slug)
+    end
   end
 
   def check_slug(slug)
     n = slug.chars.last.to_i if slug
     if Item.find_by(slug: self.slug)
       n += 1
-      self.slug =   "#{self.name.delete(' ').downcase}#{n}"
+      self.slug =   "#{self.name.delete(' ').downcase}-#{n}"
       check_slug(self.slug)
     else
       self.slug
