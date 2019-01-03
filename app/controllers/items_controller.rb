@@ -6,6 +6,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find_by(slug: params[:id])
+    @item = Item.find_by(slug: params[:slug])
   end
 end
