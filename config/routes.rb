@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   resources :merchants, only: [:index], param: :slug
 
   get '/cart', to: 'cart#index'
-  post '/cart/additem/:slug', to: 'cart#add_item', as: 'cart_add_item'
-  post '/cart/addmoreitem/:slug', to: 'cart#add_more_item', as: 'cart_add_more_item'
+  post '/cart/additem/:slug', to: 'cart#add_item', as: 'cart_add_item', param: :slug
+  post '/cart/addmoreitem/:slug', to: 'cart#add_more_item', as: 'cart_add_more_item', param: :slug
   delete '/cart', to: 'cart#destroy', as: 'cart_empty'
   delete '/cart/item/:slug', to: 'cart#remove_more_item', as: 'cart_remove_more_item', param: :slug
   delete '/cart/item/:slug/all', to: 'cart#remove_all_of_item', as: 'cart_remove_item_all', param: :slug
@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get '/logout', to: 'session#destroy'
 
   get '/register', to: 'users#new', as: 'registration'
-  resources :users, only: [:create, :update]
+  resources :users, only: [:create, :update], param: :slug
 
   get '/dashboard', to: 'merchants#show', as: 'dashboard'
   namespace :dashboard do
