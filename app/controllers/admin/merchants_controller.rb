@@ -19,7 +19,7 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   def enable
-    set_user_active(true)
+    set_user_active(true, params[:merchant_slug])
   end
 
   def disable
