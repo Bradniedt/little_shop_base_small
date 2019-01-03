@@ -1,5 +1,4 @@
 class Item < ApplicationRecord
-  include ERB::Util
 
   belongs_to :user, foreign_key: 'merchant_id'
   has_many :order_items
@@ -16,7 +15,7 @@ class Item < ApplicationRecord
   }
   validates :slug, uniqueness: true
 
-  before_validation :make_slug
+  before_create :make_slug
 
   def self.item_popularity(count, order)
     Item.joins(:order_items)
