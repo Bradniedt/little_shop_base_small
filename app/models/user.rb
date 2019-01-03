@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include ERB::Util
+  
   has_secure_password
 
   has_many :items, foreign_key: 'merchant_id'

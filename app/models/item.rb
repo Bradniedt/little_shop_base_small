@@ -1,4 +1,6 @@
 class Item < ApplicationRecord
+  include ERB::Util
+
   belongs_to :user, foreign_key: 'merchant_id'
   has_many :order_items
   has_many :orders, through: :order_items
@@ -12,6 +14,9 @@ class Item < ApplicationRecord
     only_integer: true,
     greater_than_or_equal_to: 0
   }
+  validates :slug, presence: true, uniqueness: true
+
+  before_validation :make_slug
 
   def self.item_popularity(count, order)
     Item.joins(:order_items)
@@ -40,5 +45,11 @@ class Item < ApplicationRecord
 
   def ever_ordered?
     OrderItem.find_by_item_id(self.id) !=  nil
+  end
+
+  private
+
+  def make_slug
+    self.slug = self.name.delete(' ').downcase if self.name
   end
 end
