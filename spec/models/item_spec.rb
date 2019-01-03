@@ -9,6 +9,7 @@ RSpec.describe Item, type: :model do
     it { should validate_presence_of :inventory }
     it { should validate_numericality_of(:inventory).only_integer }
     it { should validate_numericality_of(:inventory).is_greater_than_or_equal_to(0) }
+    it { should validate_uniqueness_of :slug }
   end
 
   describe 'relationships' do
@@ -46,6 +47,20 @@ RSpec.describe Item, type: :model do
   end
 
   describe 'instance methods' do
+    it '.make_slug' do
+      user = create(:merchant)
+      item = create(:item, name: 'cheese grater',  user: user)
+
+      expect(item.slug).to eq("cheesegrater-0")
+    end
+
+    it '.check_slug' do
+      user = create(:merchant)
+      item_1 = create(:item, name: 'cheese grater',  user: user)
+      item_2 = create(:item, name: 'cheese grater',  user: user)
+      #this method will be called from within the make_slug method
+      expect(item_2.slug).to eq('cheesegrater-1')
+    end
     it '.avg_fulfillment_time' do
       item = create(:item)
       merchant = item.user

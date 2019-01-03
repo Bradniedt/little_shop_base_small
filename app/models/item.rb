@@ -1,4 +1,5 @@
 class Item < ApplicationRecord
+
   belongs_to :user, foreign_key: 'merchant_id'
   has_many :order_items
   has_many :orders, through: :order_items
@@ -12,6 +13,9 @@ class Item < ApplicationRecord
     only_integer: true,
     greater_than_or_equal_to: 0
   }
+  validates :slug, uniqueness: true
+
+  before_create :make_slug
 
   def self.item_popularity(count, order)
     Item.joins(:order_items)
@@ -41,4 +45,29 @@ class Item < ApplicationRecord
   def ever_ordered?
     OrderItem.find_by_item_id(self.id) !=  nil
   end
+
+  def to_param
+    self.slug
+  end
+
+  private
+
+  def make_slug
+    if self.name
+      self.slug =   "#{self.name.delete(' ').downcase}-0"
+      check_slug(self.slug)
+    end
+  end
+
+  def check_slug(slug)
+    n = slug.chars.last.to_i if slug
+    if Item.find_by(slug: self.slug)
+      n += 1
+      self.slug =   "#{self.name.delete(' ').downcase}-#{n}"
+      check_slug(self.slug)
+    else
+      self.slug
+    end
+  end
+
 end

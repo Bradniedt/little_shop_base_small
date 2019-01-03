@@ -10,7 +10,7 @@ class Dashboard::ItemsController < Dashboard::BaseController
   end
 
   def edit
-    @item = Item.find(params[:id])
+    @item = Item.find_by(slug: params[:slug])
     @form_path = [:dashboard, @item]
   end
 
@@ -22,7 +22,7 @@ class Dashboard::ItemsController < Dashboard::BaseController
     ip[:active] = true
     @merchant = current_user
     if current_admin?
-      @merchant = User.find(params[:merchant_id])
+      @merchant = User.find_by(slug: params[:slug])
     end
     @item = @merchant.items.create(ip)
     if @item.save
@@ -43,7 +43,7 @@ class Dashboard::ItemsController < Dashboard::BaseController
   end
 
   def destroy
-    @item = Item.find(params[:id])
+    @item = Item.find_by(slug: params[:slug])
     merchant = @item.user
     if @item && @item.ever_ordered?
       flash[:error] = "Attempt to delete #{@item.name} was thwarted!"
@@ -60,11 +60,16 @@ class Dashboard::ItemsController < Dashboard::BaseController
   def update
     @merchant = current_user
     if current_admin?
-      @merchant = User.find(params[:merchant_id])
+      @merchant = User.find_by(slug: params[:slug])
+      @item = Item.find_by(slug: params[:id])
+    else
+      @item = Item.find_by(slug: params[:slug])
     end
-    @item = Item.find(params[:id])
 
     ip = item_params
+    if ip[:name] != @item.name
+      ip[:slug] = make_slug(ip[:name])
+    end
     if ip[:image].empty?
       ip[:image] = 'https://picsum.photos/200/300/?image=524'
     end
@@ -97,12 +102,30 @@ class Dashboard::ItemsController < Dashboard::BaseController
 
   private
 
+  def make_slug(name)
+    if name
+      slug =   "#{name.delete(' ').downcase}-0"
+      check_slug(slug)
+    end
+  end
+
+  def check_slug(slug)
+    n = slug.chars.last.to_i if slug
+    if Item.find_by(slug: slug)
+      n += 1
+      slug =   "#{slug.delete(' ').downcase}-#{n}"
+      check_slug(slug)
+    else
+      slug
+    end
+  end
+
   def item_params
-    params.require(:item).permit(:name, :description, :image, :price, :inventory)
+    params.require(:item).permit(:name, :description, :image, :price, :inventory, :slug)
   end
 
   def set_item_active(state)
-    item = Item.find(params[:id])
+    item = Item.find_by(slug: params[:slug])
     item.active = state
     item.save
     if current_admin?

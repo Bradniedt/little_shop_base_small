@@ -48,10 +48,12 @@ RSpec.describe 'Admin User Show workflow', type: :feature do
       fill_in :user_zip,	with: zip
       click_button 'Update User'
 
+      user = User.find(@user_1.id)
+
       user_check = User.find(@user_1.id)
       expect(user_check.password_digest).to_not eq(@user_1.password_digest)
 
-      expect(current_path).to eq(admin_user_path(@user_1))
+      expect(current_path).to eq(admin_user_path(user))
       expect(page).to have_content("Profile Page for #{user_check.name}")
       expect(page).to have_content(user_check.email)
       within '#address' do

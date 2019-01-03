@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include ERB::Util
+
   has_secure_password
 
   has_many :items, foreign_key: 'merchant_id'
@@ -7,8 +9,11 @@ class User < ApplicationRecord
 
   validates_presence_of :name, :address, :city, :state, :zip
   validates :email, presence: true, uniqueness: true
+  validates :slug, presence: true, uniqueness: true
 
   enum role: [:default, :merchant, :admin]
+
+  before_validation :make_slug
 
   def self.top_3_revenue_merchants
     User.joins(items: :order_items)
@@ -111,5 +116,15 @@ class User < ApplicationRecord
       .group(:id)
       .order('revenue desc')
       .limit(3)
+  end
+
+  def to_param
+    self.slug
+  end
+
+  private
+
+  def make_slug
+    self.slug = self.email.parameterize if self.email
   end
 end

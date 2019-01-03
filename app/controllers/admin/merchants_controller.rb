@@ -1,6 +1,6 @@
 class Admin::MerchantsController < Admin::BaseController
   def show
-    @merchant = User.find(params[:id])
+    @merchant = User.find_by(slug: params[:slug])
     if @merchant.default?
       redirect_to admin_user_path(@merchant)
     else
@@ -19,22 +19,22 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   def enable
-    set_user_active(true)
+    set_user_active(true, params[:merchant_slug])
   end
 
   def disable
-    set_user_active(false)
+    set_user_active(false, params[:merchant_slug])
   end
 
   def downgrade
-    set_user_role(User.find(params[:merchant_id]), :default)
+    set_user_role(User.find_by(slug: params[:merchant_slug]), :default)
     redirect_to merchants_path
   end
 
   private
 
-  def set_user_active(state)
-    user = User.find(params[:merchant_id])
+  def set_user_active(state, params)
+    user = User.find_by(slug: params)
     user.active = state
     user.save
     redirect_to merchants_path

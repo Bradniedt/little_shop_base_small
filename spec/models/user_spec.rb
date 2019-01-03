@@ -9,6 +9,8 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of :city }
     it { should validate_presence_of :state }
     it { should validate_presence_of :zip }
+    it { should validate_presence_of :slug }
+    it { should validate_uniqueness_of :slug }
   end
 
   describe 'relationships' do
@@ -80,6 +82,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'instance methods' do
+    it '.make_slug' do
+      user = create(:user, email: "example@gmail.com")
+
+      expect(user.slug).to eq("example-gmail-com")
+    end
     it '.my_pending_orders' do
       merchants = create_list(:merchant, 2)
       item_1 = create(:item, user: merchants[0])

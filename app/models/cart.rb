@@ -36,6 +36,9 @@ class Cart
   def subtotal(item_id)
     item = Item.find(item_id)
     item.price * count_of(item_id)
+    #ADD CODE TO SUBTRACT THE DISCOUNT AMOUNT IF A DISCOUNT IS PRESENT.
+    #THIS SHOULD BE AN ITEM INSTANCE METHOD - IF_DISCOUNT SHOULD SEE IF THE ITEM'S MERCHANT
+    #HAS A BULK DISCOUNT.
   end
 
   def grand_total
