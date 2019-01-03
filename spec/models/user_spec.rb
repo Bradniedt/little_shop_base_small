@@ -82,6 +82,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'instance methods' do
+    it '.make_slug' do
+      user = create(:user, email: "example@gmail.com")
+
+      expect(user.slug).to eq("example%40gmail.com")
+    end
     it '.my_pending_orders' do
       merchants = create_list(:merchant, 2)
       item_1 = create(:item, user: merchants[0])
