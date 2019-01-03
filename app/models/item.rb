@@ -16,7 +16,7 @@ class Item < ApplicationRecord
   }
   validates :slug, presence: true, uniqueness: true
 
-  before_validation :make_slug
+  before_save :make_slug
 
   def self.item_popularity(count, order)
     Item.joins(:order_items)
@@ -50,6 +50,6 @@ class Item < ApplicationRecord
   private
 
   def make_slug
-    self.slug = self.name.delete(' ').downcase if self.name
+    self.slug =   "#{self.id} + #{self.name.delete(' ').downcase}" if self.name
   end
 end
