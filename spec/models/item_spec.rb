@@ -51,7 +51,7 @@ RSpec.describe Item, type: :model do
       user = create(:merchant)
       item = create(:item, name: 'cheese grater',  user: user)
 
-      expect(item.slug).to eq("cheesegrater")
+      expect(item.slug).to eq("cheesegrater-0")
     end
 
     it '.check_slug' do
@@ -59,7 +59,7 @@ RSpec.describe Item, type: :model do
       item_1 = create(:item, name: 'cheese grater',  user: user)
       item_2 = create(:item, name: 'cheese grater',  user: user)
       #this method will be called from within the make_slug method
-      expect(item_2.slug).to eq('cheesegrater1')
+      expect(item_2.slug).to eq('cheesegrater-1')
     end
     it '.avg_fulfillment_time' do
       item = create(:item)
