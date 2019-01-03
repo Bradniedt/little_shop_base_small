@@ -27,7 +27,7 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   def downgrade
-    set_user_role(User.find(params[:merchant_id]), :default)
+    set_user_role(User.find_by(slug: params[:merchant_slug]), :default)
     redirect_to merchants_path
   end
 
