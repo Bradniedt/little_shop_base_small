@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   enum role: [:default, :merchant, :admin]
 
-  before_validation :make_slug
+  before_save :make_slug
 
   def self.top_3_revenue_merchants
     User.joins(items: :order_items)
@@ -118,9 +118,13 @@ class User < ApplicationRecord
       .limit(3)
   end
 
+  def to_param
+    self.slug
+  end
+
   private
 
   def make_slug
-    self.slug = url_encode(self.email) if self.email
+    self.slug = self.email.parameterize if self.email
   end
 end

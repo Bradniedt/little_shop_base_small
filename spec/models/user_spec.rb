@@ -85,7 +85,7 @@ RSpec.describe User, type: :model do
     it '.make_slug' do
       user = create(:user, email: "example@gmail.com")
 
-      expect(user.slug).to eq("example%40gmail.com")
+      expect(user.slug).to eq("example-gmail-com")
     end
     it '.my_pending_orders' do
       merchants = create_list(:merchant, 2)
