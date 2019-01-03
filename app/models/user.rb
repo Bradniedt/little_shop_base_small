@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   enum role: [:default, :merchant, :admin]
 
-  before_save :make_slug
+  before_validation :make_slug
 
   def self.top_3_revenue_merchants
     User.joins(items: :order_items)
