@@ -18,5 +18,4 @@ class Admin::ItemsController < Admin::BaseController
     @form_path = [:admin, @merchant, @item]
     render "/dashboard/items/edit"
   end
-
 end
