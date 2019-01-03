@@ -14,7 +14,7 @@ class Item < ApplicationRecord
     only_integer: true,
     greater_than_or_equal_to: 0
   }
-  validates :slug, presence: true, uniqueness: true
+  validates :slug, uniqueness: true
 
   before_save :make_slug
 
@@ -50,6 +50,19 @@ class Item < ApplicationRecord
   private
 
   def make_slug
-    self.slug =   "#{self.id} + #{self.name.delete(' ').downcase}" if self.name
+    self.slug =   "#{self.name.delete(' ').downcase}" if self.name
+    check_slug(self.slug)
   end
+
+  def check_slug(slug)
+    n = slug.chars.last.to_i if slug
+    if Item.find_by(slug: self.slug)
+      n += 1
+      self.slug =   "#{self.name.delete(' ').downcase}#{n}"
+      check_slug(self.slug)
+    else
+      self.slug
+    end
+  end
+
 end
