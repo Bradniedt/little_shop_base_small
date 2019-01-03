@@ -23,7 +23,7 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   def disable
-    set_user_active(false)
+    set_user_active(false, params[:merchant_slug])
   end
 
   def downgrade
@@ -33,8 +33,8 @@ class Admin::MerchantsController < Admin::BaseController
 
   private
 
-  def set_user_active(state)
-    user = User.find_by(slug: params[:slug])
+  def set_user_active(state, params)
+    user = User.find_by(slug: params)
     user.active = state
     user.save
     redirect_to merchants_path
