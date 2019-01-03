@@ -8,7 +8,7 @@ class CartController < ApplicationController
   end
 
   def add_item
-    add_item_to_cart(params[:id])
+    add_item_to_cart(params[:slug])
     redirect_to items_path
   end
 
@@ -45,8 +45,8 @@ class CartController < ApplicationController
     render file: 'errors/not_found', status: 404 unless !current_user || (current_user && current_user.default?)
   end
 
-  def add_item_to_cart(item_id)
-    item = Item.find(item_id)
+  def add_item_to_cart(slug)
+    item = Item.find_by(slug: slug)
     @cart.add_item(item.id)
     flash[:success] = "You have #{pluralize(@cart.count_of(item.id), 'package')} of #{item.name} in your cart"
     session[:cart] = @cart.contents
