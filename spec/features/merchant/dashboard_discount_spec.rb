@@ -4,7 +4,7 @@ describe 'as a merchant user' do
   context 'when I visit my dashboard' do
     it 'should have a link to see my discounts' do
       merch = create(:merchant)
-      discount_1 = merch.discounts.create(type: 0, amount: 5)
+      discount_1 = merch.discounts.create(discount_type: 0, amount: 5)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merch)
       visit dashboard_path
 
