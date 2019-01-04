@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20190104164701) do
   create_table "discounts", force: :cascade do |t|
     t.integer "discount_type"
     t.integer "amount"
+    t.integer "quantity"
     t.bigint "user_id"
     t.index ["user_id"], name: "index_discounts_on_user_id"
   end
