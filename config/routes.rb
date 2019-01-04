@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     resources :items, except: [:show], param: :slug
     patch '/items/:slug/enable', to: 'items#enable', as: 'enable_item', param: :slug
     patch '/items/:slug/disable', to: 'items#disable', as: 'disable_item', param: :slug
+    resources :discounts, only: [:index]
   end
   get '/profile', to: 'profile#index', as: 'profile'
 
