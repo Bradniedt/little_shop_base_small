@@ -19,12 +19,16 @@ describe 'as a merchant user' do
         expect(page).to have_content(discount_1.discount_type)
         expect(page).to have_content(discount_1.amount)
         expect(page).to have_content(discount_1.quantity)
+        expect(page).to have_link('Edit This Discount')
+        expect(page).to have_link('Delete This Discount')
       end
       within("#discount-#{discount_2.id}") do
         expect(page).to have_content(discount_2.id)
         expect(page).to have_content(discount_2.discount_type)
         expect(page).to have_content(discount_2.amount)
         expect(page).to have_content(discount_2.quantity)
+        expect(page).to have_link('Edit This Discount')
+        expect(page).to have_link('Delete This Discount')
       end
     end
   end
