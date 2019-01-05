@@ -18,6 +18,7 @@ describe 'as a merchant user' do
       discount = Discount.all.last
 
       expect(current_path).to eq(dashboard_discounts_path)
+      expect(page).to have_content("Discount #{discount.id} has been created!")
       within("#discount-#{discount.id}") do
         expect(page).to have_content(discount.id)
         expect(page).to have_content(discount.discount_type)
@@ -27,7 +28,7 @@ describe 'as a merchant user' do
         expect(page).to have_link('Delete This Discount')
       end
     end
-    it 'takes me to a form to create a new discount, and it wont let me create a discount without all fields filled' do
+    xit 'takes me to a form to create a new discount, and it wont let me create a discount without all fields filled' do
       merch = create(:merchant)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merch)
       visit dashboard_discounts_path
@@ -36,6 +37,7 @@ describe 'as a merchant user' do
       expect(current_path).to eq(new_dashboard_discount_path)
 
       click_on("Create Discount")
+      save_and_open_page
 
       expect(current_path).to eq(new_dashboard_discount_path)
       expect(page).to have_content("Discount type cannot be blank")
