@@ -10,9 +10,9 @@ describe 'as a merchant user' do
       click_on('Create A New Discount')
       expect(current_path).to eq(new_dashboard_discount_path)
 
-      fill_in :discount_discount_type, with: 0
-      fill_in :discount_amount, with: 5
-      fill_in :discount_quantity, with: 10
+      fill_in 'discount[discount_type]', with: 0
+      fill_in 'discount[amount]', with: 5
+      fill_in 'discount[quantity]', with: 10
       click_on("Create Discount")
 
       discount = Discount.all.last
@@ -37,8 +37,6 @@ describe 'as a merchant user' do
 
       click_on("Create Discount")
 
-      discount = Discount.all.last
-
       expect(current_path).to eq(new_dashboard_discount_path)
       expect(page).to have_content("Discount type cannot be blank")
       expect(page).to have_content("Discount amount cannot be blank")
@@ -53,14 +51,14 @@ describe 'as a merchant user' do
       click_on('Create A New Discount')
       expect(current_path).to eq(new_dashboard_discount_path)
 
-      fill_in :discount_discount_type, with: 1
-      fill_in :discount_amount, with: 10
-      fill_in :discount_quantity, with: 20
+      fill_in 'discount[discount_type]', with: 1
+      fill_in 'discount[amount]', with: 10
+      fill_in 'discount[quantity]', with: 20
       click_on("Create Discount")
 
       discount = Discount.all.last
 
-      expect(current_path).to eq(new_dashboard_discount_path)
+      expect(current_path).to eq(dashboard_discounts_path)
       expect(page).to have_content("Discount type must match existing discounts")
     end
   end
