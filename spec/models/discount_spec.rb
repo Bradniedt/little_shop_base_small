@@ -6,6 +6,8 @@ RSpec.describe Discount, type: :model do
     it { should validate_presence_of(:amount) }
     it { should validate_numericality_of(:amount).only_integer }
     it { should validate_numericality_of(:amount).is_greater_than_or_equal_to(0) }
+    it { should validate_numericality_of(:quantity).only_integer }
+    it { should validate_numericality_of(:quantity).is_greater_than_or_equal_to(0) }
   end
   describe 'relationships' do
     it { should belong_to(:user) }
