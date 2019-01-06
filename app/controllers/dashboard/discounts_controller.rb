@@ -21,7 +21,7 @@ class Dashboard::DiscountsController < Dashboard::BaseController
         render :new
       end
     else
-      if @merchant.discounts.first.discount_type == dp[:discount_type]
+      if Discount.type_check(dp[:discount_type].to_i, @merchant.id)
         @discount = @merchant.discounts.create(dp)
         if @discount.save
           flash[:success] = "Discount #{@discount.id} has been created!"
@@ -48,7 +48,7 @@ class Dashboard::DiscountsController < Dashboard::BaseController
     @discount = Discount.find(params[:id])
     dp = discount_params
     @merchant = current_user
-    if @merchant.discounts.length == 1
+    if Discount.type_check(dp[:discount_type].to_i, @merchant.id)
       @discount.update(dp)
       if @discount.save
         flash[:success] = "Discount #{@discount.id} has been updated!"
@@ -58,20 +58,9 @@ class Dashboard::DiscountsController < Dashboard::BaseController
         render :edit
       end
     else
-      if Discount.type_check(dp[:discount_type].to_i, @merchant.id)
-        @discount.update(dp)
-        if @discount.save
-          flash[:success] = "Discount #{@discount.id} has been updated!"
-          redirect_to dashboard_discounts_path
-        else
-          @form_path = [:dashboard, @discount]
-          render :edit
-        end
-      else
-        flash[:notice] = "Discount type must be the same as your other discounts!"
-        @form_path = [:dashboard, @discount]
-        render :edit
-      end
+      flash[:notice] = "Discount type must be the same as your other discounts!"
+      @form_path = [:dashboard, @discount]
+      render :edit
     end
   end
 

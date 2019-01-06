@@ -212,4 +212,12 @@ RSpec.describe 'Cart workflow', type: :feature do
       expect(page).to_not have_button("Add to cart")
     end
   end
+  context 'as a registered user' do
+    it 'when I add an item to my cart that has a discount, and I increase the quantity to the discount quantity, I see the updated price' do
+      item_2 = create(:item, user: @merchant)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+
+      
+    end
+  end
 end
