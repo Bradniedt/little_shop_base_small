@@ -61,6 +61,7 @@ describe 'as a merchant user' do
       expect(page).to_not have_content(discount_1.discount_type)
       expect(page).to_not have_content(discount_1.amount)
       expect(page).to_not have_content(discount_1.quantity)
+      expect(page).to have_content("Discount ##{discount_1.id} was deleted.")
 
       within("#discount-#{discount_2.id}") do
         expect(page).to have_content(discount_2.id)
