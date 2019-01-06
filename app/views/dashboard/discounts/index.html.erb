@@ -6,7 +6,7 @@
     <li>Type: <%= discount.discount_type %></li>
     <li>Amount: <%= discount.amount %></li>
     <li>Quantity: <%= discount.quantity %></li>
-    <li><%= link_to "Edit This Discount", dashboard_discount_path(discount), method: :put %></li>
+    <li><%= link_to "Edit This Discount", edit_dashboard_discount_path(discount) %></li>
     <li><%= link_to "Delete This Discount", dashboard_discount_path(discount), method: :delete %></li>
   </ul>
 <% end %>
