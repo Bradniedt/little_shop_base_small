@@ -26,12 +26,14 @@ describe 'as a merchant user' do
 
       expect(current_path).to eq(dashboard_discounts_path)
 
-      expect(page).to have_content("Discount #{discount.id} has been edited!")
-      within("#discount-#{discount_1.id}") do
-        expect(page).to have_content(discount_1.id)
-        expect(page).to have_content(discount_1.discount_type)
-        expect(page).to have_content(new_amount)
-        expect(page).to have_content(new_quantity)
+      discount = Discount.find(discount_1.id)
+
+      expect(page).to have_content("Discount #{discount_1.id} has been updated!")
+      within("#discount-#{discount.id}") do
+        expect(page).to have_content(discount.id)
+        expect(page).to have_content(discount.discount_type)
+        expect(page).to have_content(discount.amount)
+        expect(page).to have_content(discount.quantity)
         expect(page).to have_link('Edit This Discount')
         expect(page).to have_link('Delete This Discount')
       end
