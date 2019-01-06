@@ -28,7 +28,7 @@ describe 'as a merchant user' do
         expect(page).to have_link('Delete This Discount')
       end
     end
-    xit 'takes me to a form to create a new discount, and it wont let me create a discount without all fields filled' do
+    it 'takes me to a form to create a new discount, and it wont let me create a discount without all fields filled' do
       merch = create(:merchant)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merch)
       visit dashboard_discounts_path
@@ -37,12 +37,12 @@ describe 'as a merchant user' do
       expect(current_path).to eq(new_dashboard_discount_path)
 
       click_on("Create Discount")
-      save_and_open_page
 
-      expect(current_path).to eq(new_dashboard_discount_path)
-      expect(page).to have_content("Discount type cannot be blank")
-      expect(page).to have_content("Discount amount cannot be blank")
-      expect(page).to have_content("Discount quantity cannot be blank")
+      expect(page).to have_content("Discount type can't be blank")
+      expect(page).to have_content("Amount can't be blank")
+      expect(page).to have_content("Amount is not a number")
+      expect(page).to have_content("Quantity can't be blank")
+      expect(page).to have_content("Quantity is not a number")
     end
     it 'takes me to a form to create a new discount, and I can only create a discount with the same type as my other discounts' do
       merch = create(:merchant)
