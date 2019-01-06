@@ -33,7 +33,7 @@ describe 'as a merchant user' do
         expect(page).to have_link('Delete This Discount')
       end
     end
-    xit 'should be able to delete a discount' do
+    it 'should be able to delete a discount' do
       merch = create(:merchant)
       discount_1 = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
       discount_2 = merch.discounts.create(discount_type: 0, amount: 10, quantity: 20)
@@ -54,6 +54,8 @@ describe 'as a merchant user' do
         expect(page).to have_link('Delete This Discount')
         click_on("Delete This Discount")
       end
+      merchant = User.find(merch.id)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
 
       expect(current_path).to eq(dashboard_discounts_path)
 
