@@ -22,7 +22,7 @@ describe 'as a merchant user' do
 
       fill_in 'discount[amount]', with: 15
       fill_in 'discount[quantity]', with: 20
-      click_on("Edit Discount")
+      click_on("Update Discount")
 
       expect(current_path).to eq(dashboard_discounts_path)
 
