@@ -39,6 +39,15 @@ class Dashboard::DiscountsController < Dashboard::BaseController
     end
   end
 
+  def destroy
+    merchant = current_user
+    discount = merchant.discounts.find(params[:id])
+    id = discount.id
+    Discount.find(id).delete
+    flash[:success] = "Discount id ##{id} was deleted."
+    redirect_to dashboard_discounts_path
+  end
+
   private
 
   def discount_params

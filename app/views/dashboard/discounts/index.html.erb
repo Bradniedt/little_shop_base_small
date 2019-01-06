@@ -2,11 +2,11 @@
 
 <% @discounts.each do |discount| %>
   <ul id="discount-<%= discount.id %>">
-    <li><%= discount.id %></li>
-    <li><%= discount.discount_type %></li>
-    <li><%= discount.amount %></li>
-    <li><%= discount.quantity %></li>
+    <li>Discount #<%= discount.id %></li>
+    <li>Type: <%= discount.discount_type %></li>
+    <li>Amount: <%= discount.amount %></li>
+    <li>Quantity: <%= discount.quantity %></li>
     <li><%= link_to "Edit This Discount", dashboard_discount_path(discount), method: :put %></li>
-    <li><%= link_to "Delete This Discount", dashboard_discount_path(discount), method: :destroy%></li>
+    <li><%= link_to "Delete This Discount", dashboard_discount_path(discount), method: :delete %></li>
   </ul>
 <% end %>
