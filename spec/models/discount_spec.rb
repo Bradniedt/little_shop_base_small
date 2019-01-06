@@ -12,4 +12,16 @@ RSpec.describe Discount, type: :model do
   describe 'relationships' do
     it { should belong_to(:user) }
   end
+  describe 'class methods' do
+    context "#type_check" do
+      it 'should return true if the discount type is the same as others for that merchant, and false if not.' do
+        merch = create(:merchant)
+        discount_1 = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+        discount_2 = merch.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+
+        expect(Discount.type_check(0, merchant.id)).to eq(true)
+        expect(Discount.type_check(1, merchant.id)).to eq(false)
+      end
+    end
+  end
 end
