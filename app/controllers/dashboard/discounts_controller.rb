@@ -1,6 +1,6 @@
 class Dashboard::DiscountsController < Dashboard::BaseController
   def index
-    @discounts = current_user.discounts
+    @discounts = Discount.where(user_id: current_user.id)
   end
 
   def new
@@ -58,7 +58,7 @@ class Dashboard::DiscountsController < Dashboard::BaseController
         render :edit
       end
     else
-      if Discount.type_check(dp[:discount_type], @merchant.id)
+      if Discount.type_check(dp[:discount_type].to_i, @merchant.id)
         @discount.update(dp)
         if @discount.save
           flash[:success] = "Discount #{@discount.id} has been updated!"
