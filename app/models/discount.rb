@@ -10,4 +10,13 @@ class Discount < ApplicationRecord
     allow_blank: false }
 
   belongs_to :user
+
+  def self.type_check(type, merchant_id)
+    existing_type = self.where(user_id: merchant_id).pluck(:discount_type).uniq.first
+    if existing_type == type
+      return true
+    else
+      return false
+    end
+  end
 end
