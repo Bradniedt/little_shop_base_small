@@ -17,10 +17,24 @@ describe 'as a merchant user' do
 
       expect(current_path).to eq(edit_dashboard_discount_path(discount_1))
 
-      fill_in 'discount[discount_type]', with: 0
+      new_amount = 15
+      new_quantity = 20
+
       fill_in 'discount[amount]', with: 15
       fill_in 'discount[quantity]', with: 20
       click_on("Edit Discount")
+
+      expect(current_path).to eq(dashboard_discounts_path)
+
+      expect(page).to have_content("Discount #{discount.id} has been edited!")
+      within("#discount-#{discount_1.id}") do
+        expect(page).to have_content(discount_1.id)
+        expect(page).to have_content(discount_1.discount_type)
+        expect(page).to have_content(new_amount)
+        expect(page).to have_content(new_quantity)
+        expect(page).to have_link('Edit This Discount')
+        expect(page).to have_link('Delete This Discount')
+      end
     end
   end
 end
