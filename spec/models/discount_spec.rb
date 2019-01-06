@@ -19,8 +19,8 @@ RSpec.describe Discount, type: :model do
         discount_1 = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
         discount_2 = merch.discounts.create(discount_type: 0, amount: 10, quantity: 20)
 
-        expect(Discount.type_check(0, merchant.id)).to eq(true)
-        expect(Discount.type_check(1, merchant.id)).to eq(false)
+        expect(Discount.type_check(0, merch.id)).to eq(true)
+        expect(Discount.type_check(1, merch.id)).to eq(false)
       end
     end
   end
