@@ -45,8 +45,6 @@ describe 'as a merchant user' do
       click_on('My Discounts')
       expect(current_path).to eq(dashboard_discounts_path)
 
-      expect(page).to have_link('Create A New Discount')
-
       within("#discount-#{discount_1.id}") do
         expect(page).to have_content(discount_1.id)
         expect(page).to have_content(discount_1.discount_type)
@@ -54,7 +52,16 @@ describe 'as a merchant user' do
         expect(page).to have_content(discount_1.quantity)
         expect(page).to have_link('Edit This Discount')
         expect(page).to have_link('Delete This Discount')
+        click_on("Delete This Discount")
       end
+
+      expect(current_path).to eq(dashboard_discounts_path)
+
+      expect(page).to_not have_content(discount_1.id)
+      expect(page).to_not have_content(discount_1.discount_type)
+      expect(page).to_not have_content(discount_1.amount)
+      expect(page).to_not have_content(discount_1.quantity)
+
       within("#discount-#{discount_2.id}") do
         expect(page).to have_content(discount_2.id)
         expect(page).to have_content(discount_2.discount_type)
