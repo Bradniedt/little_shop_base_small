@@ -47,6 +47,14 @@ RSpec.describe Item, type: :model do
   end
 
   describe 'instance methods' do
+    it '.discount_check' do
+      user = create(:merchant)
+      discount = user.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      item = create(:item, name: 'cheese grater',  user: user)
+
+      expect(item.discount_check(10)).to eq(true)
+      expect(item.discount_check(9)).to eq(false)
+    end
     it '.make_slug' do
       user = create(:merchant)
       item = create(:item, name: 'cheese grater',  user: user)
