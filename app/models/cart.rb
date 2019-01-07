@@ -35,7 +35,21 @@ class Cart
 
   def subtotal(item_id)
     item = Item.find(item_id)
-    item.price * count_of(item_id)
+    merchant = User.find(item.user_id)
+    count = count_of(item_id)
+    if merchant.discounts == []
+      item.price * count
+    else
+      if merchant.discounts.type_check(0, merchant.id) && merchants.discounts.qty_check(count)
+        discount = merchants.discounts.qty_match(count)
+        (item.price * count) * (discount.amount / 100.0)
+      elsif merchant.discounts.type_check(1, merchant.id) && merchants.discounts.qty_check(count)
+        discount = merchants.discounts.qty_match(count)
+        (item.price * count) - discount.amount
+      else
+        item.price * count
+      end
+    end
     #ADD CODE TO SUBTRACT THE DISCOUNT AMOUNT IF A DISCOUNT IS PRESENT.
     #THIS SHOULD BE AN ITEM INSTANCE METHOD - IF_DISCOUNT SHOULD SEE IF THE ITEM'S MERCHANT
     #HAS A BULK DISCOUNT.

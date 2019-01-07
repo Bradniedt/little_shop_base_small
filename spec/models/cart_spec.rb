@@ -74,9 +74,12 @@ RSpec.describe Cart do
   end
 
   it '.subtotal' do
-    merchant = create(:merchant)
-    discount = merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
-    item_1 = create(:item, user: merchant, price: BigDecimal.new('4.5'))
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+    discount_1 = merchant_1.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+    discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+    item_1 = create(:item, user: merchant_1, price: BigDecimal.new('4.5'))
+    item_2 = create(:item, user: merchant_2, price: BigDecimal.new('4.5'))
     cart = Cart.new({})
     cart.add_item(item_1.id)
     cart.add_item(item_1.id)
@@ -86,7 +89,11 @@ RSpec.describe Cart do
     7.times do
       cart.add_item(item_1.id)
     end
-    expect(cart.subtotal(item_1.id)).to eq(36)
+    expect(cart.subtotal(item_1.id)).to eq(42.75)
+    10.times do
+      cart.add_item(item_2.id)
+    end
+    expect(cart.subtotal(item_2.id)).to eq(40.00)
   end
 
   it '.grand_total' do
