@@ -215,7 +215,7 @@ RSpec.describe 'Cart workflow', type: :feature do
   context 'as a registered user' do
     it 'when I add an item to my cart that has a discount, and I increase the quantity to the discount quantity, I see the updated price' do
       user = create(:user)
-      item_2 = create(:item, user: @merchant)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4.5'))
       discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
@@ -231,7 +231,7 @@ RSpec.describe 'Cart workflow', type: :feature do
           click_button 'Add more to cart'
         end
       end
-      
+
       expect(page).to have_content("Subtotal: $36.00")
     end
   end
