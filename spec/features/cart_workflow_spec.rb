@@ -77,6 +77,7 @@ RSpec.describe 'Cart workflow', type: :feature do
         expect(page).to have_content("Price: #{number_to_currency(@item.price)}")
         expect(page).to have_content("Quantity: 1")
         expect(page).to have_content("Subtotal: #{number_to_currency(@item.price*1)}")
+        expect(page).to_not have_content("Discount Applied!")
       end
       within "#item-#{@item_2.id}" do
         expect(page).to have_content(@item_2.name)
@@ -248,41 +249,13 @@ RSpec.describe 'Cart workflow', type: :feature do
       end
       expect(page).to have_content("Subtotal: $40.00")
 
-      # within "#item-#{item_2.id}" do
-      #
-      # click_button 'Add more to cart'
-      #
-      # end
-      # expect(page).to have_content("Subtotal: $55.57")
+      within "#item-#{item_2.id}" do
+        expect(page).to have_content("Discount Applied!")
+      end
 
-      # within "#item-#{item_2.id}" do
-      #   7.times do
-      #     click_button 'Add more to cart'
-      #   end
-      # end
-      # expect(page).to have_content("Subtotal: $81.00")
-      # #ITEM 3 cart item
-      #
-      # within "#item-#{item_3.id}" do
-      #   3.times do
-      #     click_button 'Add more to cart'
-      #   end
-      # end
-      # expect(page).to have_content("Subtotal: $53.50")
-      #
-      # within "#item-#{item_3.id}" do
-      #   7.times do
-      #     click_button 'Add more to cart'
-      #   end
-      # end
-      # expect(page).to have_content("Subtotal: $80.00")
-      #
-      # within "#item-#{item_3.id}" do
-      #   3.times do
-      #     click_button 'Add more to cart'
-      #   end
-      # end
-      # expect(page).to have_content("Subtotal: $93.50")
+      within "#item-#{item_3.id}" do
+        expect(page).to have_content("Discount Applied!")
+      end
     end
     it 'when I add an item to my cart that has a discount, and I increase the quantity over the discount quantity, I see the updated price' do
       user = create(:user)
