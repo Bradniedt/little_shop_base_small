@@ -33,12 +33,14 @@ RSpec.describe Discount, type: :model do
       end
     end
     context "#qty_check" do
-      it 'should return the discount that matches the item quantity' do
+      it 'should return a boolean if a discount applies the item quantity' do
         merch = create(:merchant)
         discount_1 = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
         discount_2 = merch.discounts.create(discount_type: 0, amount: 10, quantity: 20)
 
         expect(merch.discounts.qty_check(10)).to eq(true)
+        expect(merch.discounts.qty_check(12)).to eq(true)
+        expect(merch.discounts.qty_check(21)).to eq(true)
         expect(merch.discounts.qty_check(5)).to eq(false)
       end
     end

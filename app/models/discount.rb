@@ -21,12 +21,12 @@ class Discount < ApplicationRecord
   end
 
   def self.qty_match(num)
-    discount = self.where("discounts.quantity = ?", num)
+    discount = self.where("discounts.quantity <= ?", num)
     discount.first
   end
 
   def self.qty_check(num)
-    discount = self.where("discounts.quantity = ?", num)
+    discount = self.where("discounts.quantity <= ?", num)
     if discount == []
       return false
     else
