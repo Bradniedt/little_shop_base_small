@@ -23,5 +23,15 @@ RSpec.describe OrderItem, type: :model do
 
       expect(oi.subtotal).to eq(15)
     end
+    it '.discount_check' do
+      merch = create(:merchant)
+      discount = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      item = create(:item, user: merch)
+      oi = create(:order_item, item: item, quantity: 10, price: 3)
+      oi_2 = create(:order_item, quantity: 5, price: 3)
+
+      expect(oi.discount_check).to eq(true)
+      expect(oi.discount_check).to eq(false)
+    end
   end
 end
