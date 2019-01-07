@@ -25,4 +25,12 @@ class Discount < ApplicationRecord
     discount.first
   end
 
+  def self.qty_check(num)
+    discount = self.where("discounts.quantity = ?", num)
+    if discount == []
+      return false
+    else
+      return true
+    end
+  end
 end
