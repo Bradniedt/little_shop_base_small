@@ -191,5 +191,32 @@ RSpec.describe 'Profile Orders page', type: :feature do
         expect(page).to have_content("In stock: 125")
       end
     end
+    it 'shows me that a discount was applied to an order' do
+      user = create(:user)
+      merchant = create(:merchant)
+      discount = merchant.discounts.create(discount_type: 0, amount: )
+      item = create(:item, user: merchant, price: BigDecimal.new('4'))
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item)
+      click_button("Add to Cart")
+
+      within "#item-#{item.id}" do
+        10.times do
+          click_button 'Add more to cart'
+        end
+      end
+
+      click_button "Checkout"
+
+      order = Order.all.last
+
+      visit profile_orders_path
+
+      click_on "Order ID #{order.id}"
+
+      expect(page).to have_content("A discount was applied to this order.")
+    end
   end
 end
