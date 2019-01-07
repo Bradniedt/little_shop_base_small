@@ -51,9 +51,6 @@ class Cart
         item.price * count
       end
     end
-    #ADD CODE TO SUBTRACT THE DISCOUNT AMOUNT IF A DISCOUNT IS PRESENT.
-    #THIS SHOULD BE AN ITEM INSTANCE METHOD - IF_DISCOUNT SHOULD SEE IF THE ITEM'S MERCHANT
-    #HAS A BULK DISCOUNT.
   end
 
   def grand_total
