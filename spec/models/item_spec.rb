@@ -49,11 +49,20 @@ RSpec.describe Item, type: :model do
   describe 'instance methods' do
     it '.discount_check' do
       user = create(:merchant)
+      user_2 = create(:merchant)
       discount = user.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_2 = user.discounts.create(discount_type: 0, amount: 10, quantity: 20)
       item = create(:item, name: 'cheese grater',  user: user)
+      item_2 = create(:item, name: 'cheese greater',  user: user_2)
 
-      expect(item.discount_check(10)).to eq(true)
       expect(item.discount_check(9)).to eq(false)
+      expect(item.discount_check(10)).to eq(true)
+      expect(item.discount_check(15)).to eq(true)
+      expect(item.discount_check(20)).to eq(true)
+      expect(item.discount_check(22)).to eq(true)
+
+      expect(item_2.discount_check(1)).to eq(false)
+      expect(item_2.discount_check(10)).to eq(false)
     end
     it '.make_slug' do
       user = create(:merchant)
