@@ -19,4 +19,10 @@ class Discount < ApplicationRecord
       return false
     end
   end
+
+  def self.qty_match(num)
+    discount = self.where("discounts.quantity = ?", num)
+    discount.first
+  end
+
 end
