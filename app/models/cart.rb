@@ -43,7 +43,7 @@ class Cart
       if merchant.discounts.type_check(0, merchant.id) && merchant.discounts.qty_check(count)
         discount = merchant.discounts.qty_match(count)
         total = (item.price * count)
-        total - (total * (discount.amount / 100.0))
+        total * (1.0 -(discount.amount / 100.0))
       elsif merchant.discounts.type_check(1, merchant.id) && merchant.discounts.qty_check(count)
         discount = merchant.discounts.qty_match(count)
         (item.price * count) - discount.amount
