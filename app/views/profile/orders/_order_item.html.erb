@@ -6,6 +6,9 @@
     <img id="item-<%= oitem.item.id %>-image" alt="image for <%= oitem.item.name %>" src="<%= oitem.item.image %>" width="<%= img_width %>" />
     <p>Merchant: <%= oitem.item.user.name %></p>
     <p>Price: <%= number_to_currency(oitem.price) %></p>
+    <% if oitem.discount_check %>
+      <p>A discount of <%= oitem.discount_number %> was applied to this item.</p>
+    <% end %>
     <p>Quantity: <%= oitem.quantity %></p>
     <p>Subtotal: <%= number_to_currency(oitem.subtotal) %></p>
     <p>Fulfilled: <%= oitem.fulfilled ? 'Yes' : 'No' %></p>
