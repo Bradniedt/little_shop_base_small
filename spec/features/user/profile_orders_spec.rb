@@ -225,8 +225,9 @@ RSpec.describe 'Profile Orders page', type: :feature do
       merch = create(:merchant)
       discount = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
       item = create(:item, user: merch)
+      item_2 = create(:item, user: merch)
       oi = create(:order_item, item: item, quantity: 10, price: 3)
-      oi_2 = create(:order_item, quantity: 5, price: 3)
+      oi_2 = create(:order_item, item: item_2, quantity: 4, price: 3)
       order = create(:order, user: user, order_items: [oi, oi_2])
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)

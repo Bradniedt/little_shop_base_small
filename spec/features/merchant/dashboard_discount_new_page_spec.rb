@@ -71,6 +71,22 @@ describe 'as a merchant user' do
       expect(page).to have_content("Quantity can't be blank")
       expect(page).to have_content("Quantity is not a number")
     end
+    it 'takes me to a form to create a new discount, and it wont let me create a discount without all fields filled' do
+      merch = create(:merchant)
+      discount_1 = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merch)
+      visit dashboard_discounts_path
+
+      click_on('Create A New Discount')
+      expect(current_path).to eq(new_dashboard_discount_path)
+
+      fill_in 'discount[discount_type]', with: 0
+      fill_in 'discount[amount]', with: "j"
+      fill_in 'discount[quantity]', with: 20
+      click_on("Create Discount")
+
+      expect(page).to have_content("Amount is not a number")
+    end
     it 'takes me to a form to create a new discount, and I can only create a discount with the same type as my other discounts' do
       merch = create(:merchant)
       discount_1 = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)

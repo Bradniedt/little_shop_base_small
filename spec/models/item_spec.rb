@@ -64,7 +64,7 @@ RSpec.describe Item, type: :model do
       discount = user.discounts.create(discount_type: 0, amount: 5, quantity: 10)
       discount_2 = user.discounts.create(discount_type: 0, amount: 10, quantity: 20)
       item = create(:item, name: 'cheese grater',  user: user)
-      item_2 = create(:item, name: 'cheese greater',  user: user_2)
+      item_2 = create(:item, name: 'cheese grater',  user: user_2)
 
       expect(item.discount_check(9)).to eq(false)
       expect(item.discount_check(10)).to eq(true)
@@ -86,6 +86,7 @@ RSpec.describe Item, type: :model do
       user = create(:merchant)
       item_1 = create(:item, name: 'cheese grater',  user: user)
       item_2 = create(:item, name: 'cheese grater',  user: user)
+      item_3 = create(:item, name: 'cheese grater',  user: user)
       #this method will be called from within the make_slug method
       expect(item_2.slug).to eq('cheesegrater-1')
     end

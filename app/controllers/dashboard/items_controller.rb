@@ -113,8 +113,9 @@ class Dashboard::ItemsController < Dashboard::BaseController
     n = slug.chars.last.to_i if slug
     if Item.find_by(slug: slug)
       n += 1
-      slug =   "#{slug.delete(' ').downcase}-#{n}"
-      check_slug(slug)
+      slug.chop!
+      new_slug =   "#{slug.delete(' ').downcase}#{n}"
+      check_slug(new_slug)
     else
       slug
     end
