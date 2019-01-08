@@ -389,5 +389,32 @@ RSpec.describe 'Cart workflow', type: :feature do
       end
       expect(page).to_not have_content("Discount Applied!")
     end
+    it 'when I add an item to my cart that has a discount, and I increase the quantity to get the discount and I checkout, the order total reflects my discount' do
+      user = create(:user)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4'))
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item_2)
+      click_button("Add to Cart")
+
+      visit cart_path
+
+      within "#item-#{item_2.id}" do
+        9.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Discount Applied!")
+
+      click_on "Check out"
+
+      order = Order.all.last
+
+      visit profile_order_path(order)
+      expect(page).to have_content("Total Cost: $38.00")
+    end
   end
 end
