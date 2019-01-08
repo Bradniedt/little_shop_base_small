@@ -273,8 +273,22 @@ RSpec.describe 'Merchant Dashboard page' do
         end
       end
     end
-  end
 
-  context 'as an admin' do
+  context 'as a merchant, when I visit an order show page for an order with a discount' do
+    it 'should show me a message if the order item had a discount applied to it' do
+      merchant = create(:merchant)
+      discount = merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      item = create(:item, user: merchant)
+      oi = create(:order_item, item: item, quantity: 10, price: 3)
+      order = create(:completed_order, order_items: [oi])
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
+
+      visit dashboard_order_path(order)
+
+      within "#item-#{oi.id}"
+        expect(page).to have_content("A discount of 5% was applied to this item.")
+      end
+    end
   end
 end
