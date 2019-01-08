@@ -45,8 +45,8 @@ create(:fulfilled_order_item, order: order, item: item_3, price: 3, quantity: 26
 create(:fulfilled_order_item, order: order, item: item_4, price: 4, quantity: 13, created_at: rng.rand(23).hour.ago, updated_at: rng.rand(59).minutes.ago)
 
 order = create(:order, user: user)
-create(:order_item, order: order, item: item_1, price: 1, quantity: 1)
-create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 1, created_at: rng.rand(23).days.ago, updated_at: rng.rand(23).hours.ago)
+create(:order_item, order: order, item: item_1, price: 1, quantity: 10)
+create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 21, created_at: rng.rand(23).days.ago, updated_at: rng.rand(23).hours.ago)
 
 order = create(:cancelled_order, user: user)
 create(:order_item, order: order, item: item_2, price: 2, quantity: 1, created_at: rng.rand(23).hour.ago, updated_at: rng.rand(59).minutes.ago)
