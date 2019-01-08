@@ -217,7 +217,6 @@ RSpec.describe 'Profile Orders page', type: :feature do
       visit profile_orders_path
 
       click_on "Order ID #{order.id}"
-      save_and_open_page
 
       expect(page).to have_content("A discount was applied to this order.")
     end
@@ -235,7 +234,6 @@ RSpec.describe 'Profile Orders page', type: :feature do
       visit profile_orders_path
 
       click_on "Order ID #{order.id}"
-      save_and_open_page
 
       within "#oitem-#{oi.id}" do
         expect(page).to have_content("A discount of 5% was applied to this item.")
