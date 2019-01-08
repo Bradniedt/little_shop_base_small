@@ -18,6 +18,8 @@
 <%= button_to "Downgrade to User", admin_merchant_downgrade_path(@merchant), method: :patch %>
 <% end %>
 
+<%= link_to "My Discounts", dashboard_discounts_path %>
+
 <%= tag.div id: 'orders' do %>
   <% if @orders.empty? %>
     You don't have any pending orders to fulfill

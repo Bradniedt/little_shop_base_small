@@ -191,5 +191,54 @@ RSpec.describe 'Profile Orders page', type: :feature do
         expect(page).to have_content("In stock: 125")
       end
     end
+    it 'shows me that a discount was applied to an order' do
+      user = create(:user)
+      merchant = create(:merchant)
+      discount = merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      item = create(:item, user: merchant, price: BigDecimal.new('4'))
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item)
+      click_button("Add to Cart")
+
+      visit cart_path
+
+      within "#item-#{item.id}" do
+        10.times do
+          click_button 'Add more to cart'
+        end
+      end
+
+      click_button "Check out"
+
+      order = Order.all.last
+
+      visit profile_orders_path
+
+      click_on "Order ID #{order.id}"
+
+      expect(page).to have_content("A discount was applied to this order.")
+    end
+    it 'shows me that a discount was applied to an order item' do
+      user = create(:user)
+      merch = create(:merchant)
+      discount = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      item = create(:item, user: merch)
+      item_2 = create(:item, user: merch)
+      oi = create(:order_item, item: item, quantity: 10, price: 3)
+      oi_2 = create(:order_item, item: item_2, quantity: 4, price: 3)
+      order = create(:order, user: user, order_items: [oi, oi_2])
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit profile_orders_path
+
+      click_on "Order ID #{order.id}"
+
+      within "#oitem-#{oi.id}" do
+        expect(page).to have_content("A discount of 5% was applied to this item.")
+      end
+    end
   end
 end

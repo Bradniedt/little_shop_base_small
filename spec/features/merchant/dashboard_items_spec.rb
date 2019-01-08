@@ -396,4 +396,22 @@ RSpec.describe 'Merchant Dashboard Items page' do
       end
     end
   end
+  context "as a merchant" do
+    it "an item's slug should update if the item name is updated and there is another item with the same name." do
+      merchant = create(:merchant)
+      item = create(:item, name: "cheese grater", user: merchant)
+      item_2 = create(:item, name: "cheese", user: merchant)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
+
+      visit edit_dashboard_item_path(item_2)
+
+      fill_in :item_name, with: "cheese grater"
+      click_button 'Update Item'
+
+      item_two = Item.find(item_2.id)
+
+      expect(item_two.slug).to eq("cheesegrater-1")
+    end
+  end
 end

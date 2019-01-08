@@ -1,0 +1,16 @@
+<h3><%= link_to "Create A New Discount", new_dashboard_discount_path %></h3>
+
+<% @discounts.each do |discount| %>
+<div class="card float-left m-3" style="width: 18rem;">
+  <div class="card-body">
+    <ul class="discount-list" id="discount-<%= discount.id %>">
+      <li>Discount #<%= discount.id %></li>
+      <li>Type: <%= discount.discount_type %></li>
+      <li>Amount: <%= discount.amount %></li>
+      <li>Quantity: <%= discount.quantity %></li>
+      <li><%= link_to "Edit This Discount", edit_dashboard_discount_path(discount) %></li>
+      <li><%= link_to "Delete This Discount", dashboard_discount_path(discount), method: :delete %></li>
+    </ul>
+  </div>
+</div>
+<% end %>

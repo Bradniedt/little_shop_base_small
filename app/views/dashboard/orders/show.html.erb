@@ -16,6 +16,9 @@
       <p><img id="item-<%= item.id %>-image" alt="image for <%= item.name %>" src="<%= item.image %>" width="150" /></p>
       <p>Price: <%= number_to_currency(@order.item_price(item.id)) %></p>
       <p>Quantity: <%= @order.item_quantity(item.id) %></p>
+      <% if item.discount_check(@order.item_quantity(item.id)) %>
+        <p>A discount of <%= item.discount_number(@order.item_quantity(item.id)) %> was applied to this item.</p>
+      <% end %>
       <p>
       <% if @order.item_fulfilled?(item.id) %>
         Fulfilled!

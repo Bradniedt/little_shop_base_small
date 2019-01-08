@@ -77,6 +77,7 @@ RSpec.describe 'Cart workflow', type: :feature do
         expect(page).to have_content("Price: #{number_to_currency(@item.price)}")
         expect(page).to have_content("Quantity: 1")
         expect(page).to have_content("Subtotal: #{number_to_currency(@item.price*1)}")
+        expect(page).to_not have_content("Discount Applied!")
       end
       within "#item-#{@item_2.id}" do
         expect(page).to have_content(@item_2.name)
@@ -210,6 +211,183 @@ RSpec.describe 'Cart workflow', type: :feature do
       visit item_path(@item)
 
       expect(page).to_not have_button("Add to cart")
+    end
+  end
+  context 'as a registered user' do
+    it 'when I add an item to my cart that has a discount, and I increase the quantity to the discount quantity, I see the updated price' do
+      user = create(:user)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4.5'))
+      merchant_2 = create(:merchant)
+      item_3 = create(:item, user: merchant_2, price: BigDecimal.new('4.5'))
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 10, quantity: 20)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item_2)
+      click_button("Add to Cart")
+
+      visit item_path(item_3)
+      click_button("Add to Cart")
+
+
+      visit cart_path
+
+      within "#item-#{item_2.id}" do
+        9.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $42.75")
+
+      within "#item-#{item_3.id}" do
+        9.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $40.00")
+
+      within "#item-#{item_2.id}" do
+        expect(page).to have_content("Discount Applied!")
+      end
+
+      within "#item-#{item_3.id}" do
+        expect(page).to have_content("Discount Applied!")
+      end
+    end
+    it 'when I add an item to my cart that has a discount, and I increase the quantity over the discount quantity, I see the updated price' do
+      user = create(:user)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4'))
+      merchant_2 = create(:merchant)
+      item_3 = create(:item, user: merchant_2, price: BigDecimal.new('4'))
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 10, quantity: 20)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item_2)
+      click_button("Add to Cart")
+
+      visit item_path(item_3)
+      click_button("Add to Cart")
+
+
+      visit cart_path
+
+      within "#item-#{item_2.id}" do
+        12.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $49.40")
+
+      within "#item-#{item_3.id}" do
+        12.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $47.00")
+    end
+    it 'when I add an item to my cart that has a discount, and I increase the quantity up to the highest discount quantity, I see the updated price' do
+      user = create(:user)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4'))
+      merchant_2 = create(:merchant)
+      item_3 = create(:item, user: merchant_2, price: BigDecimal.new('4'))
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 10, quantity: 20)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item_2)
+      click_button("Add to Cart")
+
+      visit item_path(item_3)
+      click_button("Add to Cart")
+
+
+      visit cart_path
+
+      within "#item-#{item_2.id}" do
+        19.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $76.00")
+
+      within "#item-#{item_3.id}" do
+        19.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $75.00")
+    end
+    it 'when I add an item to my cart that has a discount, and I increase the quantity over the highest discount quantity, I see the updated price' do
+      user = create(:user)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4'))
+      merchant_2 = create(:merchant)
+      item_3 = create(:item, user: merchant_2, price: BigDecimal.new('4'))
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+      discount_2 = merchant_2.discounts.create(discount_type: 1, amount: 10, quantity: 20)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item_2)
+      click_button("Add to Cart")
+
+      visit item_path(item_3)
+      click_button("Add to Cart")
+
+
+      visit cart_path
+
+      within "#item-#{item_2.id}" do
+        22.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $87.40")
+
+      within "#item-#{item_3.id}" do
+        22.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Subtotal: $87.00")
+    end
+    it 'when I add an item to my cart that has a discount, and I increase the quantity over the highest discount quantity, I see the updated price' do
+      user = create(:user)
+      item_2 = create(:item, user: @merchant, price: BigDecimal.new('4'))
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_1 = @merchant.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit item_path(item_2)
+      click_button("Add to Cart")
+
+      visit cart_path
+
+      within "#item-#{item_2.id}" do
+        9.times do
+          click_button 'Add more to cart'
+        end
+      end
+      expect(page).to have_content("Discount Applied!")
+
+      within "#item-#{item_2.id}" do
+        1.times do
+          click_button 'Remove one from cart'
+        end
+      end
+      expect(page).to_not have_content("Discount Applied!")
     end
   end
 end

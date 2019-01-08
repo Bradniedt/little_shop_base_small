@@ -47,6 +47,34 @@ RSpec.describe Item, type: :model do
   end
 
   describe 'instance methods' do
+    it '.discount_number' do
+      merch = create(:merchant)
+      merch_2 = create(:merchant)
+      discount = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_2 = merch_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+      item = create(:item, user: merch)
+      item_2 = create(:item, user: merch_2)
+
+      expect(item.discount_number(10)).to eq("5%")
+      expect(item_2.discount_number(10)).to eq("$5")
+    end
+    it '.discount_check' do
+      user = create(:merchant)
+      user_2 = create(:merchant)
+      discount = user.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_2 = user.discounts.create(discount_type: 0, amount: 10, quantity: 20)
+      item = create(:item, name: 'cheese grater',  user: user)
+      item_2 = create(:item, name: 'cheese grater',  user: user_2)
+
+      expect(item.discount_check(9)).to eq(false)
+      expect(item.discount_check(10)).to eq(true)
+      expect(item.discount_check(15)).to eq(true)
+      expect(item.discount_check(20)).to eq(true)
+      expect(item.discount_check(22)).to eq(true)
+
+      expect(item_2.discount_check(1)).to eq(false)
+      expect(item_2.discount_check(10)).to eq(false)
+    end
     it '.make_slug' do
       user = create(:merchant)
       item = create(:item, name: 'cheese grater',  user: user)
@@ -58,6 +86,7 @@ RSpec.describe Item, type: :model do
       user = create(:merchant)
       item_1 = create(:item, name: 'cheese grater',  user: user)
       item_2 = create(:item, name: 'cheese grater',  user: user)
+      item_3 = create(:item, name: 'cheese grater',  user: user)
       #this method will be called from within the make_slug method
       expect(item_2.slug).to eq('cheesegrater-1')
     end

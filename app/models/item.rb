@@ -50,6 +50,26 @@ class Item < ApplicationRecord
     self.slug
   end
 
+  def discount_check(qty)
+    merchant = User.find(self.merchant_id)
+    if merchant.discounts == []
+      return false
+    else
+      return merchant.discounts.qty_check(qty)
+    end
+  end
+
+  def discount_number(qty)
+    merchant = User.find(self.merchant_id)
+    discount = merchant.discounts.qty_match(qty)
+    num = discount.amount
+    if discount.discount_type == 0
+      return "#{num}%"
+    else
+      return "$#{num}"
+    end
+  end
+
   private
 
   def make_slug
