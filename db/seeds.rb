@@ -26,10 +26,10 @@ discount_8 = merchant_4.discounts.create(discount_type: 1, amount: 10, quantity:
 inactive_merchant_1 = create(:inactive_merchant)
 inactive_user_1 = create(:inactive_user)
 
-item_1 = create(:item, user: merchant_1)
-item_2 = create(:item, user: merchant_2)
-item_3 = create(:item, user: merchant_3)
-item_4 = create(:item, user: merchant_4)
+item_1 = create(:item, user: merchant_1, inventory: 31)
+item_2 = create(:item, user: merchant_2, inventory: 45)
+item_3 = create(:item, user: merchant_3, inventory: 11)
+item_4 = create(:item, user: merchant_4, inventory: 52)
 create_list(:item, 10, user: merchant_1)
 
 inactive_item_1 = create(:inactive_item, user: merchant_1)
