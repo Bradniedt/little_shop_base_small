@@ -47,6 +47,17 @@ RSpec.describe Item, type: :model do
   end
 
   describe 'instance methods' do
+    it '.discount_number' do
+      merch = create(:merchant)
+      merch_2 = create(:merchant)
+      discount = merch.discounts.create(discount_type: 0, amount: 5, quantity: 10)
+      discount_2 = merch_2.discounts.create(discount_type: 1, amount: 5, quantity: 10)
+      item = create(:item, user: merch)
+      item_2 = create(:item, user: merch_2)
+
+      expect(item.discount_number(10)).to eq("5%")
+      expect(item_2.discount_number(10)).to eq("$5")
+    end
     it '.discount_check' do
       user = create(:merchant)
       user_2 = create(:merchant)
