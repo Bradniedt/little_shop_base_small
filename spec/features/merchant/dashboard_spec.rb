@@ -280,7 +280,7 @@ RSpec.describe 'Merchant Dashboard page' do
       discount = merchant.discounts.create(discount_type: 0, amount: 5, quantity: 10)
       item = create(:item, user: merchant)
       oi = create(:order_item, item: item, quantity: 10, price: 3)
-      order = create(:completed_order, order_items: [oi])
+      order = create(:order, order_items: [oi])
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
 
