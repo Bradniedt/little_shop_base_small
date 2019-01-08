@@ -31,7 +31,7 @@ RSpec.describe OrderItem, type: :model do
       oi_2 = create(:order_item, quantity: 5, price: 3)
 
       expect(oi.discount_check).to eq(true)
-      expect(oi.discount_check).to eq(false)
+      expect(oi_2.discount_check).to eq(false)
     end
   end
 end
